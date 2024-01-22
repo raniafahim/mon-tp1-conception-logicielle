@@ -1,32 +1,19 @@
-# Importer le module datetime
 from datetime import datetime
 import pytz
+import logging
 
-# Obtenir la date et l'heure actuelles
-heure_actuelle = datetime.now()
-
-# Formater l'heure au format "HH:MM:SS"
-heure_formattee = heure_actuelle.strftime("%H:%M:%S")
-
-# Afficher l'heure formatée dans la console
-print(str(heure_formattee))
- 
-
-# Obtenir la date et l'heure actuelles au fuseau horaire UTC
-heure_utc = datetime.now(pytz.utc)
-
-# Définir les fuseaux horaires pour La Réunion et Paris
-zone_reunion = pytz.timezone('Indian/Reunion')
-zone_paris = pytz.timezone('Europe/Paris')
-
-# Convertir l'heure UTC aux heures de La Réunion et de Paris
-heure_reunion = heure_utc.astimezone(zone_reunion)
-heure_paris = heure_utc.astimezone(zone_paris)
-
-# Formater les heures au format "HH:MM:SS"
-heure_reunion_formattee = heure_reunion.strftime("%H:%M:%S")
-heure_paris_formattee = heure_paris.strftime("%H:%M:%S")
-
-# Afficher les heures formatées dans la console
-print("Heure à La Réunion:", str(heure_reunion_formattee))
-print("Heure à Paris:", str(heure_paris_formattee))
+logging.basicConfig(filename="traitement.log", encoding='utf-8', level=logging.DEBUG)
+logging.info(f"Lancement du traitement")
+timezone_paris = pytz.timezone('Europe/Paris')
+timezone_reunion = pytz.timezone('Indian/Reunion')
+def get_date_formatted(timezone):
+    if timezone is None:
+        raise ValueError("aucune timezone n'a été renseignée")
+    logging.debug(f"Demande d'heure sur le timezone : {timezone}")
+    date = datetime.now(timezone)
+    return date.strftime("%H:%M:%S")
+try:
+    get_date_formatted(None) 
+except ValueError as e:
+    logging.error(e)
+logging.info(f"result {get_date_formatted(timezone_reunion)}")
